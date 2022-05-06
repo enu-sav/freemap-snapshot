@@ -1,0 +1,25 @@
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+  "url": "https://www.freemap.sk/?map=13/48.622667/20.884063&layers=X&osm-relation=2384692",
+  "viewport": {
+    "width": 800,
+    "height": 600,
+    "deviceScaleFactor": 2
+  }
+}
+
+###
+
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+  "url": "https://local.freemap.sk:9000/?map=10/48.622667/20.884063&layers=X&osm-relation=2384692",
+  "viewport": {
+    "width": 800,
+    "height": 600,
+    "deviceScaleFactor": 2
+  }
+}
