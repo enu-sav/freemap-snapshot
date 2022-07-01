@@ -9,7 +9,7 @@ Server for creating map snapshots
 
 ## Running
 
-1. In this directory run `FM_SAV_HTTP_PORT=8080 node .`
+1. In this directory run `PORT=8080 node .`
 
 ## HTTP REST API
 

@@ -41,7 +41,7 @@ puppeteer.launch().then((browser) => {
 
   const server = http.createServer(requestListener);
 
-  const port = Number(process.env.FM_SAV_HTTP_PORT || 8080);
+  const port = Number(process.env.PORT || 8080);
 
   server.listen(port, () => {
     console.log(`Listening on port ${port}.`);
