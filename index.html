@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test</title>
+
+    <script>
+      window.addEventListener("message", (e) => {
+        try {
+          if (e.data.freemap.action !== "urlUpdated") {
+            return;
+          }
+        } catch (err) {
+          return;
+        }
+
+        console.log("URL", e.data.freemap.payload);
+      });
+    </script>
+  </head>
+
+  <body>
+    <iframe
+      src="https://www.freemap.sk/?embed=search"
+      style="width: 640px; height: 480px; border: 0"
+      allowfullscreen
+    ></iframe>
+  </body>
+</html>

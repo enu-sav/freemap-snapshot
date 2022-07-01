@@ -41,20 +41,39 @@ puppeteer.launch().then((browser) => {
 
   const server = http.createServer(requestListener);
 
-  server.listen(Number(process.env.FM_SAV_HTTP_PORT || 8080));
+  const port = Number(process.env.FM_SAV_HTTP_PORT || 8080);
+
+  server.listen(port, () => {
+    console.log(`Listening on port ${port}.`);
+  });
 });
 
+/**
+ *
+ * @param {puppeteer.Browser} browser
+ * @param {*} options
+ * @returns
+ */
 async function createScreenshot(
   browser,
-  { viewport = {}, url, imageProperties = { type: "jpeg", quality: 90 } }
+  {
+    viewport = {},
+    url,
+    imageProperties = { type: "jpeg", quality: 90 },
+    searchResultStyle = {}
+  }
 ) {
   const page = await browser.newPage();
 
   await page.setViewport(viewport);
 
-  await page.evaluateOnNewDocument(() => {
-    window.fmHeadless = true;
-  });
+  await page.evaluateOnNewDocument(`
+    Object.defineProperty(window, 'fmHeadless', {
+      get() {
+        return ${JSON.stringify({ searchResultStyle })}
+      }
+    })
+  `);
 
   await page.goto(url, {
     waitUntil: "networkidle2",

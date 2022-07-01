@@ -21,5 +21,8 @@ Content-Type: application/json
     "width": 800,
     "height": 600,
     "deviceScaleFactor": 2
+  },
+  "searchResultStyle": {
+    "color": "purple"
   }
 }
