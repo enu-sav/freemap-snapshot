@@ -20,8 +20,8 @@ Request:
 - Content-Type: application/json
 - Body: JSON object with properties:
   - `url` - URL of the page to snapshot, for example https://www.freemap.sk/?map=13/48.622667/20.884063&layers=X&osm-relation=2384692
-  - `viewport` - object with [viewport properties](https://puppeteer.github.io/puppeteer/docs/puppeteer.viewport)
-  - `screenshot` - optional object with [screenshot properties](https://puppeteer.github.io/puppeteer/docs/puppeteer.screenshotoptions), default `{ type: "jpeg", quality: 90 }`
+  - `viewport` - object with [viewport properties](https://pptr.dev/api/puppeteer.viewport)
+  - `imageProperties` - optional object with [screenshot properties](https://pptr.dev/api/puppeteer.screenshotoptions), default `{ type: "jpeg", quality: 90 }`
   - `searchResultStyle` - optional object with [style of the search result](https://leafletjs.com/reference.html#path-option)
 
 Response:
