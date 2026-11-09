@@ -2,51 +2,59 @@ const http = require("http");
 
 const puppeteer = require("puppeteer");
 
-puppeteer.launch().then((browser) => {
-  const requestListener = function (req, res) {
-    const chunks = [];
+// Puppeteer's own signal handlers close the browser but keep Node running.
+puppeteer
+  .launch({ handleSIGINT: false, handleSIGTERM: false })
+  .then((browser) => {
+    for (const signal of ["SIGINT", "SIGTERM"]) {
+      process.once(signal, () => browser.close().finally(() => process.exit()));
+    }
 
-    req.on("data", (chunk) => {
-      chunks.push(chunk);
-    });
+    const requestListener = function (req, res) {
+      const chunks = [];
 
-    req.on("end", () => {
-      try {
-        const data = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      req.on("data", (chunk) => {
+        chunks.push(chunk);
+      });
 
-        createScreenshot(browser, data)
-          .then((buffer) => {
-            res.writeHead(200, {
-              "Content-Type": "image/" + (data.imageProperties?.type ?? "jpeg"),
+      req.on("end", () => {
+        try {
+          const data = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+
+          createScreenshot(browser, data)
+            .then((buffer) => {
+              res.writeHead(200, {
+                "Content-Type":
+                  "image/" + (data.imageProperties?.type ?? "jpeg"),
+              });
+
+              res.end(buffer);
+            })
+            .catch((err) => {
+              console.error(err);
+
+              res.writeHead(500);
+
+              res.end(err.toString());
             });
+        } catch (err) {
+          console.error(err);
 
-            res.end(buffer);
-          })
-          .catch((err) => {
-            console.error(err);
+          res.writeHead(500);
 
-            res.writeHead(500);
+          res.end(err.toString());
+        }
+      });
+    };
 
-            res.end(err.toString());
-          });
-      } catch (err) {
-        console.error(err);
+    const server = http.createServer(requestListener);
 
-        res.writeHead(500);
+    const port = Number(process.env.PORT || 8080);
 
-        res.end(err.toString());
-      }
+    server.listen(port, () => {
+      console.log(`Listening on port ${port}.`);
     });
-  };
-
-  const server = http.createServer(requestListener);
-
-  const port = Number(process.env.PORT || 8080);
-
-  server.listen(port, () => {
-    console.log(`Listening on port ${port}.`);
   });
-});
 
 /**
  *
@@ -60,8 +68,8 @@ async function createScreenshot(
     viewport = {},
     url,
     imageProperties = { type: "jpeg", quality: 90 },
-    searchResultStyle = {}
-  }
+    searchResultStyle = {},
+  },
 ) {
   const page = await browser.newPage();
 
