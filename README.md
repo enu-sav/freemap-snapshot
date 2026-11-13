@@ -4,8 +4,10 @@ Server for creating map snapshots
 
 ## Installation
 
-1. Install NodeJS 14 or above
-1. In this directory run `npm i`
+1. Install NodeJS 22.12 or above
+1. In this directory run `npm ci`
+1. As the user that runs the server, install the browser into `~/.cache/puppeteer`: `npx puppeteer browsers install chrome`
+1. As root, install the browser's system libraries (Debian/Ubuntu): `npx puppeteer browsers install chrome --install-deps`
 
 ## Running
 
