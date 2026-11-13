@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "prettier": "^3.9.10"
+  },
+  "allowScripts": {
+    "puppeteer@25.16.0": true
   }
 }
